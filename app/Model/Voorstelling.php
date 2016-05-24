@@ -2,22 +2,22 @@
 
 class Voorstelling extends Model {
     public $validate = array(
-        'voorstellingsnaam' => array(
+        'VoorstellingNaam' => array(
             'rule' => 'notBlank'
         ),
-        'voorstellingsjaar' => array(
+        'VoorstellingJaar' => array(
             'rule' => 'notBlank'
         ),
-        'acteurs' => array(
+        'Acteurs' => array(
             'rule' => 'notBlank'
         ),
-        'korteinhoud' => array(
+        'KorteInhoud' => array(
             'rule' => 'notBlank'
         ),
-        'regie' => array(
+        'Regie' => array(
             'rule' => 'notBlank'
         ),
-        'auteur' => array(
+        'Auteur' => array(
             'rule' => 'notBlank'
         )
     );
