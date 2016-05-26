@@ -52,28 +52,21 @@ class VoorstellingController extends AppController {
                         if(in_array($ext, $arr_ext)){
                             //do the actual uploading of the file. First arg is the name, second arg is
                             //where we are putting it
-                            move_uploaded_file($file['name'], WWW_ROOT . 'CakePHP/app/img/' /*. $file['name']*/);
-
+                            move_uploaded_file(($file['tmp_name']), '../img' . $file['name']);
                             //prepare the filename for database entry
                             $this->request->data['Voorstelling']['FotoLink']='app/img/' . $file['name'];
                         }
                     }
-
-                    //now do the save
-                    //$this->Voorstelling->save($this->data) ;
                 }
-                print_r($this->request->data);
                 if ($this->Voorstelling->save($this->request->data)) {
                     $this->Flash->success(__('de voorstelling is succesvol toegevoegd.'));
                     return $this->redirect(array('action' => 'index'));
                 } else {
-                    echo 'fail';
                     $this->Flash->error(__('niet mogelijk om uw menuitem toe te voegen.'));
                 }
                 
             }
     }
-
 
     public function edit($id = null) {
         if (!$id) {
