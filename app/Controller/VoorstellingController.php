@@ -5,6 +5,10 @@ class VoorstellingController extends AppController {
     public $helpers = array('Html', 'Form');
     public $controllers = array('Flash');
 
+/*  --------------------------------------------------------------------------------------------------------------
+    -                                       BASE FUNCTIONS                                                       -
+    --------------------------------------------------------------------------------------------------------------    */
+    
     public function index() {
         $voorstellingen = $this->paginate();
         if ($this->request->is('requested')) {
@@ -25,38 +29,12 @@ class VoorstellingController extends AppController {
         $this->set('voorstelling', $voorstelling);
     }
     
-//    public function add(){
-//        if ($this->request->is('post')) {
-//            $this->Voorstelling->create();
-//            if ($this->Voorstelling->save($this->request->data)) {
-//                $this->Flash->success(__('de voorstelling is succesvol toegevoegd.'));
-//                return $this->redirect(array('action' => 'index'));
-//            }
-//            $this->Flash->error(__('niet mogelijk om uw menuitem toe te voegen.'));
-//        }else{echo $this->request->is('voorstelling');}
-//    }
-    
     public function add(){
         if ($this->request->is('post')) {
                 $this->Voorstelling->create();
-                if(!empty($this->data))
-                {
+                if(!empty($this->data)){
                     //Check if image has been uploaded
-                    if(!empty($this->data['Voorstelling']['FotoLink']['name'])){
-                        $file = $this->data['Voorstelling']['FotoLink']; //put the data into a var for easy use
-
-                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-                        $arr_ext = array('jpg', 'jpeg', 'gif'); //set allowed extensions
-
-                        //only process if the extension is valid
-                        if(in_array($ext, $arr_ext)){
-                            //do the actual uploading of the file. First arg is the name, second arg is
-                            //where we are putting it
-                            move_uploaded_file(($file['tmp_name']), '../img' . $file['name']);
-                            //prepare the filename for database entry
-                            $this->request->data['Voorstelling']['FotoLink']='app/img/' . $file['name'];
-                        }
-                    }
+                    $this->addimage($this->data);
                 }
                 if ($this->Voorstelling->save($this->request->data)) {
                     $this->Flash->success(__('de voorstelling is succesvol toegevoegd.'));
@@ -117,5 +95,27 @@ class VoorstellingController extends AppController {
         }
 
         return parent::isAuthorized($user);
+    }
+    
+/*  --------------------------------------------------------------------------------------------------------------
+    -                                     CUSTOM FUNCTIONS                                                       -
+    --------------------------------------------------------------------------------------------------------------    */
+    
+    public function addimage(){
+        if(!empty($this->data['Voorstelling']['FotoLink']['name'])){
+            $file = $this->data['Voorstelling']['FotoLink']; //put the data into a var for easy use
+
+            $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+            $arr_ext = array('jpg', 'jpeg', 'gif'); //set allowed extensions
+
+            //only process if the extension is valid
+            if(in_array($ext, $arr_ext)){
+                //do the actual uploading of the file. First arg is the name, second arg is
+                //where we are putting it, app/img folder
+                move_uploaded_file(($file['tmp_name']), 'img/voorstelling/' . $file['name']);
+                //prepare the filename for database entry
+                $this->request->data['Voorstelling']['FotoLink']='voorstelling/'.$file['name'];
+            }
+        }
     }
 }
