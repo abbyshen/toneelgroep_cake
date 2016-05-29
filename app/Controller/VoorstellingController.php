@@ -31,19 +31,18 @@ class VoorstellingController extends AppController {
     
     public function add(){
         if ($this->request->is('post')) {
-                $this->Voorstelling->create();
-                if(!empty($this->data)){
-                    //Check if image has been uploaded
-                    $this->addimage($this->data);
-                }
-                if ($this->Voorstelling->save($this->request->data)) {
-                    $this->Flash->success(__('de voorstelling is succesvol toegevoegd.'));
-                    return $this->redirect(array('action' => 'index'));
-                } else {
-                    $this->Flash->error(__('niet mogelijk om uw menuitem toe te voegen.'));
-                }
-                
+            $this->Voorstelling->create();
+            if(!empty($this->data)){
+                //Check if image has been uploaded
+                $this->addimage();
             }
+            if ($this->Voorstelling->save($this->request->data)) {
+                $this->Flash->success(__('de voorstelling is succesvol toegevoegd.'));
+                //return $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Flash->error(__('niet mogelijk om uw menuitem toe te voegen.'));
+            }    
+        }
     }
 
     public function edit($id = null) {
