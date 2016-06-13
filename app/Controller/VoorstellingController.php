@@ -113,7 +113,7 @@ class VoorstellingController extends AppController {
                 //where we are putting it, app/img folder
                 move_uploaded_file(($file['tmp_name']), 'img/voorstelling/' . $file['name']);
                 //prepare the filename for database entry
-                $this->request->data['Voorstelling']['FotoLink']='voorstelling/'.$file['name'];
+                $this->request->data['Voorstelling']['FotoLink']=$file['name'];
             }
         }
     }
