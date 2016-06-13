@@ -1,7 +1,7 @@
 <?php
 
-// File: /app/Controller/VoorstellingController.php
-class VoorstellingController extends AppController {
+// File: /app/Controller/NewsitemsController.php
+class NewsitemsController extends AppController {
     public $helpers = array('Html', 'Form');
     public $controllers = array('Flash');
     public $components = array('RequestHandler');
@@ -11,62 +11,62 @@ class VoorstellingController extends AppController {
     --------------------------------------------------------------------------------------------------------------    */
     
     public function index() {
-        $voorstellingen = $this->paginate();
+        $newsitems = $this->paginate();
         if ($this->request->is('requested')) {
-            return $voorstellingen;
+            return $newsitems;
         }
-        $this->set('voorstellingen', $voorstellingen);
+        $this->set('newsitems', $newsitems);
     }
 
     public function view($id = null) {
         if (!$id) {
-            throw new NotFoundException(__('Invalid voorstelling'));
+            throw new NotFoundException(__('Invalid newsitem'));
         }
 
-        $voorstelling = $this->Voorstelling->findById($id);
-        if (!$voorstelling) {
-            throw new NotFoundException(__('Invalid voorstelling'));
+        $newsitem = $this->Newsitem->findById($id);
+        if (!$newsitem) {
+            throw new NotFoundException(__('Invalid newsitem'));
         }
-        $this->set('voorstelling', $voorstelling);
+        $this->set('newsitem', $newsitem);
     }
     
     public function add(){
         if ($this->request->is('post')) {
-            $this->Voorstelling->create();
+            $this->Newsitem->create();
             if(!empty($this->data)){
                 //Check if image has been uploaded
                 $this->addimage();
             }
-            if ($this->Voorstelling->save($this->request->data)) {
-                $this->Flash->success(__('de voorstelling is succesvol toegevoegd.'));
+            if ($this->Newsitem->save($this->request->data)) {
+                $this->Flash->success(__('het nieuwsbericht is succesvol toegevoegd.'));
                 //return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Flash->error(__('niet mogelijk om uw menuitem toe te voegen.'));
+                $this->Flash->error(__('niet mogelijk om uw nieuwsbericht toe te voegen.'));
             }    
         }
     }
 
     public function edit($id = null) {
         if (!$id) {
-            throw new NotFoundException(__('Invalid voorstelling'));
+            throw new NotFoundException(__('Invalid newsitem'));
         }
 
-        $voorstelling = $this->Voorstelling->findById($id);
-        if (!$voorstelling) {
-            throw new NotFoundException(__('Invalid voorstelling'));
+        $newsitem = $this->Newsitem->findById($id);
+        if (!$newsitem) {
+            throw new NotFoundException(__('Invalid newsitem'));
         }
 
-        if ($this->request->is(array('voorstelling', 'put'))) {
-            $this->Voorstelling->id = $id;
-            if ($this->Voorstelling->save($this->request->data)) {
-                $this->Flash->success(__('Uw voorstelling is succesvol aangepast.'));
+        if ($this->request->is(array('newsitem', 'put'))) {
+            $this->Newsitem->id = $id;
+            if ($this->Newsitem->save($this->request->data)) {
+                $this->Flash->success(__('Uw nieuwsbericht is succesvol aangepast.'));
                 return $this->redirect(array('action' => 'index'));
             }
-            $this->Flash->error(__('niet mogelijk om de voorstelling aan te passen.'));
+            $this->Flash->error(__('niet mogelijk om de nieuwsbericht aan te passen.'));
         }
 
         if (!$this->request->data) {
-            $this->request->data = $voorstelling;
+            $this->request->data = $newsitem;
         }
     }
     
@@ -75,10 +75,10 @@ class VoorstellingController extends AppController {
             throw new MethodNotAllowedException();
         }
 
-        if ($this->Voorstelling->delete($id)) {
-            $this->Flash->success(__('The voorstelling with id: %s has been deleted.', h($id)));
+        if ($this->Newsitem->delete($id)) {
+            $this->Flash->success(__('het nieuwsbericht met het id: $s is succesvol verwijderd', h($id)));
         } else {
-            $this->Flash->error(__('The voorstelling with id: %s could not be deleted.', h($id)));
+            $this->Flash->error(__('het nieuwsbericht met het id: %s kan niet worden verwijderd.', h($id)));
         }
 
         return $this->redirect(array('action' => 'index'));
@@ -102,20 +102,19 @@ class VoorstellingController extends AppController {
     --------------------------------------------------------------------------------------------------------------    */
     
     public function addimage(){
-        if(!empty($this->data['Voorstelling']['FotoLink']['name'])){
-            $file = $this->data['Voorstelling']['FotoLink']; //put the data into a var for easy use
+        if(!empty($this->data['Newsitem']['fotolink']['name'])){
+            $file = $this->data['Newsitem']['fotolink']; //put the data into a var for easy use
+
             $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
             $arr_ext = array('jpg', 'png', 'jpeg', 'gif'); //set allowed extensions
+
             //only process if the extension is valid
             if(in_array($ext, $arr_ext)){
                 //do the actual uploading of the file. First arg is the name, second arg is
                 //where we are putting it, app/img folder
-                move_uploaded_file(($file['tmp_name']), 'img/voorstelling/' . $file['name']);
+                move_uploaded_file(($file['tmp_name']), 'img/newsitem/' . $file['name']);
                 //prepare the filename for database entry
-                $this->request->data['Voorstelling']['FotoLink'] = $file['name'];
-            }else{
-                $this->Flash->error(__("wrong extension please submit a .jpg .png .jpeg or .gif"));
-                return $this->redirect(array('action' => 'index'));
+                $this->request->data['Newsitem']['fotolink']=$file['name'];
             }
         }
     }

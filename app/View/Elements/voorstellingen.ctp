@@ -9,7 +9,7 @@
     <?php echo $this->Html->image('voorstelling/' . $voorstelling['Voorstelling']['FotoLink'], array(
         'url' => array('controller' => 'voorstelling', 'action' => 'view',$voorstelling['Voorstelling']['id']),
         'class' => 'homeaffiche'))?>
-    <h2><?php print($voorstelling['Voorstelling']['VoorstellingNaam']); ?></h2>
+    <p><?php print($voorstelling['Voorstelling']['VoorstellingNaam']); ?></p>
 <?php endforeach; 
 echo $this->Html->link('klik hier voor alle voorstellingen','../voorstelling');
 ?>
